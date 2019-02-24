@@ -80,8 +80,7 @@ function (_React$Component) {
       }
 
       this.props.chromeStorageSet((0, _objectSpread3.default)({}, this.props.pages, (0, _defineProperty2.default)({}, this.state.pagePath, {
-        path: this.state.pagePath,
-        requests: []
+        path: this.state.pagePath
       })));
     }
   }, {
@@ -109,8 +108,8 @@ function (_React$Component) {
       var _this3 = this;
 
       var handleAddPage = this.handleAddPage,
-          handleChangeInput = this.handleChangeInput;
-      var pages = this.getPages();
+          handleChangeInput = this.handleChangeInput,
+          pages = this.getPages();
       return _react.default.createElement(_Container.default, null, _react.default.createElement(_Row.default, null, _react.default.createElement(_Col.default, null, _react.default.createElement("h1", null, "Request Handler Tool"), _react.default.createElement("hr", null))), _react.default.createElement(_Row.default, null, _react.default.createElement(_Col.default, null, _react.default.createElement(_Form.default, {
         id: "page-form",
         inline: true
@@ -131,7 +130,7 @@ function (_React$Component) {
         return _react.default.createElement("tr", {
           key: Math.random()
         }, _react.default.createElement("td", null, _react.default.createElement(_reactRouterDom.Link, {
-          to: "/page-requests"
+          to: "/page-requests/" + encodeURIComponent(page.path)
         }, page.path)), _react.default.createElement("td", null, _react.default.createElement(_Button.default, {
           onClick: function onClick() {
             return _this3.handleRemovePage(page.path);

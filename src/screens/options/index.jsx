@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Home from './home/index';
 import PageRequests from './page-requests/index';
+import RequestMatchingDetail from './request-matching-detail';
 
 //import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -30,7 +31,8 @@ class Options extends React.Component {
         <Router>
           <Switch>
             <Route exact path="/options.html" component={Home} />
-            <Route path="/page-requests" component={PageRequests} />
+            <Route path="/page-requests/:pagePath" component={PageRequests} />
+            <Route path="/request-matching-detail/:pagePath/:requestMatching" component={RequestMatchingDetail} />
           </Switch>
         </Router>
       </Provider>

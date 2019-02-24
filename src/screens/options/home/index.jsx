@@ -36,8 +36,7 @@ class Options extends React.Component {
     this.props.chromeStorageSet({
       ...this.props.pages,
       [this.state.pagePath]: {
-        path: this.state.pagePath,
-        requests: []
+        path: this.state.pagePath
       }
     });
   }
@@ -66,8 +65,8 @@ class Options extends React.Component {
     const {
       handleAddPage,
       handleChangeInput
-    } = this;
-    const pages = this.getPages();
+    } = this,
+    pages = this.getPages();
 
     return (
       <Container>
@@ -102,7 +101,7 @@ class Options extends React.Component {
               <tbody>
                 {pages && pages.map(page =>
                   <tr key={Math.random()}>
-                    <td><Link to="/page-requests">{page.path}</Link></td>
+                    <td><Link to={"/page-requests/"+encodeURIComponent(page.path)}>{page.path}</Link></td>
                     <td><Button onClick={() => this.handleRemovePage(page.path)}>Remove</Button></td>
                   </tr>
                 )}

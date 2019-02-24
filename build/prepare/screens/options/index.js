@@ -24,6 +24,8 @@ var _index = _interopRequireDefault(require("./home/index"));
 
 var _index2 = _interopRequireDefault(require("./page-requests/index"));
 
+var _requestMatchingDetail = _interopRequireDefault(require("./request-matching-detail"));
+
 var _redurcers = _interopRequireDefault(require("redurcers"));
 
 var _redux = require("redux");
@@ -54,8 +56,11 @@ function (_React$Component) {
         path: "/options.html",
         component: _index.default
       }), _react.default.createElement(_reactRouterDom.Route, {
-        path: "/page-requests",
+        path: "/page-requests/:pagePath",
         component: _index2.default
+      }), _react.default.createElement(_reactRouterDom.Route, {
+        path: "/request-matching-detail/:pagePath/:requestMatching",
+        component: _requestMatchingDetail.default
       }))));
     }
   }]);

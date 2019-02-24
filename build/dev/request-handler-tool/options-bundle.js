@@ -115,11 +115,13 @@ var _index = _interopRequireDefault(__webpack_require__(91));
 
 var _index2 = _interopRequireDefault(__webpack_require__(122));
 
-var _redurcers = _interopRequireDefault(__webpack_require__(123));
+var _requestMatchingDetail = _interopRequireDefault(__webpack_require__(123));
+
+var _redurcers = _interopRequireDefault(__webpack_require__(124));
 
 var _redux = __webpack_require__(39);
 
-var _reduxThunk = _interopRequireDefault(__webpack_require__(125));
+var _reduxThunk = _interopRequireDefault(__webpack_require__(126));
 
 //import 'bootstrap/dist/css/bootstrap.min.css';
 var store = (0, _redux.createStore)(_redurcers.default, (0, _redux.applyMiddleware)(_reduxThunk.default));
@@ -145,8 +147,11 @@ function (_React$Component) {
         path: "/options.html",
         component: _index.default
       }), _react.default.createElement(_reactRouterDom.Route, {
-        path: "/page-requests",
+        path: "/page-requests/:pagePath",
         component: _index2.default
+      }), _react.default.createElement(_reactRouterDom.Route, {
+        path: "/request-matching-detail/:pagePath/:requestMatching",
+        component: _requestMatchingDetail.default
       }))));
     }
   }]);
@@ -31014,8 +31019,7 @@ function (_React$Component) {
       }
 
       this.props.chromeStorageSet((0, _objectSpread3.default)({}, this.props.pages, (0, _defineProperty2.default)({}, this.state.pagePath, {
-        path: this.state.pagePath,
-        requests: []
+        path: this.state.pagePath
       })));
     }
   }, {
@@ -31043,8 +31047,8 @@ function (_React$Component) {
       var _this3 = this;
 
       var handleAddPage = this.handleAddPage,
-          handleChangeInput = this.handleChangeInput;
-      var pages = this.getPages();
+          handleChangeInput = this.handleChangeInput,
+          pages = this.getPages();
       return _react.default.createElement(_Container.default, null, _react.default.createElement(_Row.default, null, _react.default.createElement(_Col.default, null, _react.default.createElement("h1", null, "Request Handler Tool"), _react.default.createElement("hr", null))), _react.default.createElement(_Row.default, null, _react.default.createElement(_Col.default, null, _react.default.createElement(_Form.default, {
         id: "page-form",
         inline: true
@@ -31065,7 +31069,7 @@ function (_React$Component) {
         return _react.default.createElement("tr", {
           key: Math.random()
         }, _react.default.createElement("td", null, _react.default.createElement(_reactRouterDom.Link, {
-          to: "/page-requests"
+          to: "/page-requests/" + encodeURIComponent(page.path)
         }, page.path)), _react.default.createElement("td", null, _react.default.createElement(_Button.default, {
           onClick: function onClick() {
             return _this3.handleRemovePage(page.path);
@@ -32817,6 +32821,10 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
+var _defineProperty2 = _interopRequireDefault(__webpack_require__(93));
+
+var _objectSpread5 = _interopRequireDefault(__webpack_require__(92));
+
 var _classCallCheck2 = _interopRequireDefault(__webpack_require__(2));
 
 var _createClass2 = _interopRequireDefault(__webpack_require__(3));
@@ -32831,11 +32839,21 @@ var _react = _interopRequireDefault(__webpack_require__(10));
 
 var _reactRedux = __webpack_require__(22);
 
+var _reactRouterDom = __webpack_require__(51);
+
 var _Container = _interopRequireDefault(__webpack_require__(94));
 
 var _Row = _interopRequireDefault(__webpack_require__(101));
 
 var _Col = _interopRequireDefault(__webpack_require__(102));
+
+var _Form = _interopRequireDefault(__webpack_require__(103));
+
+var _Table = _interopRequireDefault(__webpack_require__(117));
+
+var _Button = _interopRequireDefault(__webpack_require__(118));
+
+var _actions = __webpack_require__(121);
 
 var PageRequests =
 /*#__PURE__*/
@@ -32843,26 +32861,134 @@ function (_React$Component) {
   (0, _inherits2.default)(PageRequests, _React$Component);
 
   function PageRequests(props) {
+    var _this;
+
     (0, _classCallCheck2.default)(this, PageRequests);
-    return (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(PageRequests).call(this, props));
+    _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(PageRequests).call(this, props));
+    var pagePath = decodeURIComponent(props.match.params.pagePath);
+    _this.state = {
+      pagePath: pagePath
+    };
+
+    _this.props.chromeStorageGet(pagePath);
+
+    return _this;
   }
 
   (0, _createClass2.default)(PageRequests, [{
+    key: "getRequestMatchings",
+    value: function getRequestMatchings() {
+      var requestMatchings = this.props.pages[this.state.pagePath].requestMatchings;
+      if (!requestMatchings) return [];
+      return Object.keys(requestMatchings).map(function (path) {
+        return (0, _objectSpread5.default)({}, requestMatchings[path], {
+          requestMatching: path
+        });
+      });
+    }
+  }, {
+    key: "handleChangeInput",
+    value: function handleChangeInput(event) {
+      this.setState((0, _defineProperty2.default)({}, event.target.name, event.target.value));
+    }
+  }, {
+    key: "handleAddRequestMatching",
+    value: function handleAddRequestMatching() {
+      if (!this.state.requestMatching || !this.checkFormValidity('#request-matching-form')) {
+        return;
+      }
+
+      var pages = this.props.pages,
+          page = pages[this.state.pagePath],
+          requestMatchings = page.requestMatchings || {},
+          requestMatching = requestMatchings[this.state.requestMatching];
+      this.props.chromeStorageSet((0, _objectSpread5.default)({}, pages, (0, _defineProperty2.default)({}, this.state.pagePath, (0, _objectSpread5.default)({}, page, {
+        path: this.state.pagePath,
+        requestMatchings: (0, _objectSpread5.default)({}, requestMatchings, (0, _defineProperty2.default)({}, this.state.requestMatching, (0, _objectSpread5.default)({}, requestMatching)))
+      }))));
+    }
+  }, {
+    key: "checkFormValidity",
+    value: function checkFormValidity(selector) {
+      var form = document.querySelector(selector);
+
+      if (form.checkValidity()) {
+        return true;
+      } else {
+        form.reportValidity();
+        return false;
+      }
+    }
+  }, {
+    key: "handleRemoveRequestMatching",
+    value: function handleRemoveRequestMatching(requestMatching) {
+      var pages = this.props.pages,
+          page = pages[this.state.pagePath],
+          requestMatchings = page.requestMatchings;
+      delete requestMatchings[requestMatching];
+      this.props.chromeStorageSet((0, _objectSpread5.default)({}, pages, (0, _defineProperty2.default)({}, this.state.pagePath, (0, _objectSpread5.default)({}, page, {
+        requestMatchings: (0, _objectSpread5.default)({}, requestMatchings)
+      }))));
+    }
+  }, {
     key: "render",
     value: function render() {
-      return _react.default.createElement(_Container.default, null, _react.default.createElement(_Row.default, null, _react.default.createElement(_Col.default, null, _react.default.createElement("h1", null, "Page Requests"), _react.default.createElement("hr", null))));
+      var _this2 = this;
+
+      var pages = this.props.pages,
+          pagePath = this.state.pagePath,
+          page = pages[pagePath],
+          requestMatchings = this.getRequestMatchings();
+      return _react.default.createElement(_Container.default, null, _react.default.createElement(_Row.default, null, _react.default.createElement(_Col.default, null, _react.default.createElement("h1", null, "Page Requests: ", page.path), _react.default.createElement("hr", null))), _react.default.createElement(_Row.default, null, _react.default.createElement(_Col.default, null, _react.default.createElement(_Form.default, {
+        id: "request-matching-form",
+        inline: true
+      }, _react.default.createElement(_Form.default.Group, {
+        as: _Col.default
+      }, _react.default.createElement(_Form.default.Label, null, "Request Matching"), _react.default.createElement(_Form.default.Control, {
+        type: "text",
+        name: "requestMatching",
+        id: "requestMatching",
+        placeholder: "http://request.com",
+        onChange: this.handleChangeInput.bind(this)
+      }), _react.default.createElement(_Button.default, {
+        onClick: this.handleAddRequestMatching.bind(this)
+      }, "Add"))), _react.default.createElement("br", null))), _react.default.createElement(_Row.default, null, _react.default.createElement(_Col.default, null, _react.default.createElement(_Table.default, {
+        bordered: true,
+        hover: true
+      }, _react.default.createElement("thead", null, _react.default.createElement("tr", null, _react.default.createElement("th", null, "Request Matching"), _react.default.createElement("th", null, "Remove"))), _react.default.createElement("tbody", null, requestMatchings && requestMatchings.map(function (requestMatching) {
+        return _react.default.createElement("tr", {
+          key: Math.random()
+        }, _react.default.createElement("td", null, _react.default.createElement(_reactRouterDom.Link, {
+          to: "/request-matching-detail/" + encodeURIComponent(pagePath) + "/" + encodeURIComponent(requestMatching.requestMatching)
+        }, requestMatching.requestMatching)), _react.default.createElement("td", null, _react.default.createElement(_Button.default, {
+          onClick: function onClick() {
+            return _this2.handleRemoveRequestMatching(requestMatching.requestMatching);
+          }
+        }, "Remove")));
+      }))))));
     }
   }]);
   return PageRequests;
 }(_react.default.Component);
 
-var _default = (0, _reactRedux.connect)(function (state, ownProps) {
+var mapStateToProps = function mapStateToProps(state, ownProps) {
   return {
-    test: state.defaultAction
+    pages: state.pages
   };
-}, function (dispatch, ownProps) {
-  return {};
-})(PageRequests);
+};
+
+var mapDispatchToProps = function mapDispatchToProps(dispatch, ownProps) {
+  return {
+    chromeStorageSet: function chromeStorageSet(pages) {
+      return dispatch((0, _actions.chromeStorageSet)(pages));
+    },
+    chromeStorageGet: function chromeStorageGet() {
+      return dispatch((0, _actions.chromeStorageGet)());
+    }
+  };
+};
+
+var _default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(PageRequests);
 
 exports.default = _default;
 
@@ -32880,9 +33006,130 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
+var _defineProperty2 = _interopRequireDefault(__webpack_require__(93));
+
+var _classCallCheck2 = _interopRequireDefault(__webpack_require__(2));
+
+var _createClass2 = _interopRequireDefault(__webpack_require__(3));
+
+var _possibleConstructorReturn2 = _interopRequireDefault(__webpack_require__(4));
+
+var _getPrototypeOf2 = _interopRequireDefault(__webpack_require__(7));
+
+var _inherits2 = _interopRequireDefault(__webpack_require__(8));
+
+var _react = _interopRequireDefault(__webpack_require__(10));
+
+var _reactRedux = __webpack_require__(22);
+
+var _reactRouterDom = __webpack_require__(51);
+
+var _Container = _interopRequireDefault(__webpack_require__(94));
+
+var _Row = _interopRequireDefault(__webpack_require__(101));
+
+var _Col = _interopRequireDefault(__webpack_require__(102));
+
+var _Form = _interopRequireDefault(__webpack_require__(103));
+
+var _Table = _interopRequireDefault(__webpack_require__(117));
+
+var _Button = _interopRequireDefault(__webpack_require__(118));
+
+var _actions = __webpack_require__(121);
+
+var RequestMatchingDetail =
+/*#__PURE__*/
+function (_React$Component) {
+  (0, _inherits2.default)(RequestMatchingDetail, _React$Component);
+
+  function RequestMatchingDetail(props) {
+    var _this;
+
+    (0, _classCallCheck2.default)(this, RequestMatchingDetail);
+    _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(RequestMatchingDetail).call(this, props));
+    var pagePath = decodeURIComponent(props.match.params.pagePath),
+        requestMatching = decodeURIComponent(props.match.params.requestMatching);
+    _this.state = {
+      pagePath: pagePath,
+      requestMatching: requestMatching
+    };
+
+    _this.props.chromeStorageGet(pagePath);
+
+    return _this;
+  }
+
+  (0, _createClass2.default)(RequestMatchingDetail, [{
+    key: "handleChangeInput",
+    value: function handleChangeInput(event) {
+      this.setState((0, _defineProperty2.default)({}, event.target.name, event.target.value));
+    }
+  }, {
+    key: "checkFormValidity",
+    value: function checkFormValidity(selector) {
+      var form = document.querySelector(selector);
+
+      if (form.checkValidity()) {
+        return true;
+      } else {
+        form.reportValidity();
+        return false;
+      }
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var pages = this.props.pages,
+          _this$state = this.state,
+          pagePath = _this$state.pagePath,
+          requestMatching = _this$state.requestMatching,
+          page = pages[pagePath],
+          requestMatchingDetail = page.requestMatchings[requestMatching];
+      return _react.default.createElement(_Container.default, null, _react.default.createElement(_Row.default, null, _react.default.createElement(_Col.default, null, _react.default.createElement("h1", null, "Request Matching detail: ", requestMatching), _react.default.createElement("hr", null))));
+    }
+  }]);
+  return RequestMatchingDetail;
+}(_react.default.Component);
+
+var mapStateToProps = function mapStateToProps(state, ownProps) {
+  return {
+    pages: state.pages
+  };
+};
+
+var mapDispatchToProps = function mapDispatchToProps(dispatch, ownProps) {
+  return {
+    chromeStorageSet: function chromeStorageSet(pages) {
+      return dispatch((0, _actions.chromeStorageSet)(pages));
+    },
+    chromeStorageGet: function chromeStorageGet() {
+      return dispatch((0, _actions.chromeStorageGet)());
+    }
+  };
+};
+
+var _default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(RequestMatchingDetail);
+
+exports.default = _default;
+
+/***/ }),
+/* 124 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(1);
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
 var _redux = __webpack_require__(39);
 
-var _page = _interopRequireDefault(__webpack_require__(124));
+var _page = _interopRequireDefault(__webpack_require__(125));
 
 var _default = (0, _redux.combineReducers)({
   pages: _page.default
@@ -32891,7 +33138,7 @@ var _default = (0, _redux.combineReducers)({
 exports.default = _default;
 
 /***/ }),
-/* 124 */
+/* 125 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -32923,7 +33170,7 @@ var _default = pages;
 exports.default = _default;
 
 /***/ }),
-/* 125 */
+/* 126 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
