@@ -31055,7 +31055,7 @@ function (_React$Component) {
       }, _react.default.createElement(_Form.default.Group, {
         as: _Col.default
       }, _react.default.createElement(_Form.default.Label, null, "Page Path"), _react.default.createElement(_Form.default.Control, {
-        type: "url",
+        type: "text",
         name: "pagePath",
         id: "pagePath",
         placeholder: "http://site.com",
@@ -32787,7 +32787,7 @@ var loadPages = function loadPages(pages) {
 
 var chromeStorageGet = function chromeStorageGet() {
   return function (dispatch) {
-    return chrome.storage.sync.get(['pages'], function (config) {
+    return chrome.storage.local.get(['pages'], function (config) {
       dispatch(loadPages(config.pages || {}));
     });
   };
@@ -32797,7 +32797,7 @@ exports.chromeStorageGet = chromeStorageGet;
 
 var chromeStorageSet = function chromeStorageSet(pages) {
   return function (dispatch) {
-    return chrome.storage.sync.set({
+    return chrome.storage.local.set({
       'pages': pages
     }, function () {
       dispatch(loadPages(pages || {}));
@@ -33086,6 +33086,7 @@ function (_React$Component) {
           requestMatching = _this$state.requestMatching,
           page = pages[pagePath],
           requestMatchingDetail = page.requestMatchings[requestMatching];
+      console.log(1, '###################################', requestMatchingDetail);
       return _react.default.createElement(_Container.default, null, _react.default.createElement(_Row.default, null, _react.default.createElement(_Col.default, null, _react.default.createElement("h1", null, "Request Matching detail: ", requestMatching), _react.default.createElement("hr", null))));
     }
   }]);

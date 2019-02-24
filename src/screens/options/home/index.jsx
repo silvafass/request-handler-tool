@@ -81,7 +81,7 @@ class Options extends React.Component {
             <Form id="page-form" inline >
               <Form.Group as={Col} >
                 <Form.Label>Page Path</Form.Label>
-                <Form.Control type="url" name="pagePath" id="pagePath" placeholder="http://site.com" onChange={this.handleChangeInput.bind(this)} />
+                <Form.Control type="text" name="pagePath" id="pagePath" placeholder="http://site.com" onChange={this.handleChangeInput.bind(this)} />
                 <Button onClick={this.handleAddPage.bind(this)}>Add</Button>
               </Form.Group>
 

@@ -7,7 +7,7 @@ const loadPages = (pages) => {
 
 export const chromeStorageGet = function() {
   return dispatch => {
-    return chrome.storage.sync.get([
+    return chrome.storage.local.get([
       'pages'
     ], config => {
       dispatch(loadPages(config.pages || {}));
@@ -17,7 +17,7 @@ export const chromeStorageGet = function() {
 
 export const chromeStorageSet = function(pages) {
   return dispatch => {
-    return chrome.storage.sync.set({
+    return chrome.storage.local.set({
       'pages': pages
     }, () => {
       dispatch(loadPages(pages || {}));

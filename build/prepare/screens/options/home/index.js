@@ -116,7 +116,7 @@ function (_React$Component) {
       }, _react.default.createElement(_Form.default.Group, {
         as: _Col.default
       }, _react.default.createElement(_Form.default.Label, null, "Page Path"), _react.default.createElement(_Form.default.Control, {
-        type: "url",
+        type: "text",
         name: "pagePath",
         id: "pagePath",
         placeholder: "http://site.com",

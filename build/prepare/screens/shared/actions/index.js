@@ -14,7 +14,7 @@ var loadPages = function loadPages(pages) {
 
 var chromeStorageGet = function chromeStorageGet() {
   return function (dispatch) {
-    return chrome.storage.sync.get(['pages'], function (config) {
+    return chrome.storage.local.get(['pages'], function (config) {
       dispatch(loadPages(config.pages || {}));
     });
   };
@@ -24,7 +24,7 @@ exports.chromeStorageGet = chromeStorageGet;
 
 var chromeStorageSet = function chromeStorageSet(pages) {
   return function (dispatch) {
-    return chrome.storage.sync.set({
+    return chrome.storage.local.set({
       'pages': pages
     }, function () {
       dispatch(loadPages(pages || {}));
