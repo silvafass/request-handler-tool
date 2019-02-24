@@ -9,8 +9,10 @@ exports.default = void 0;
 
 var _redux = require("redux");
 
-var _redurcers = _interopRequireDefault(require("./redurcers"));
+var _page = _interopRequireDefault(require("./page"));
 
-var store = (0, _redux.createStore)(_redurcers.default);
-var _default = store;
+var _default = (0, _redux.combineReducers)({
+  pages: _page.default
+});
+
 exports.default = _default;

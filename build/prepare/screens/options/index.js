@@ -24,13 +24,14 @@ var _index = _interopRequireDefault(require("./home/index"));
 
 var _index2 = _interopRequireDefault(require("./page-requests/index"));
 
-var _store = _interopRequireDefault(require("./data/store"));
-
-var _actions = require("./data/actions");
-
 require("bootstrap/dist/css/bootstrap.min.css");
 
-window._store = _store.default;
+var _redurcers = _interopRequireDefault(require("redurcers"));
+
+var _redux = require("redux");
+
+var store = (0, _redux.createStore)(_redurcers.default);
+window._store = store;
 
 var Options =
 /*#__PURE__*/
@@ -38,21 +39,15 @@ function (_React$Component) {
   (0, _inherits2.default)(Options, _React$Component);
 
   function Options(props) {
-    var _this;
-
     (0, _classCallCheck2.default)(this, Options);
-    _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(Options).call(this, props));
-
-    _store.default.dispatch((0, _actions.defaultAction)());
-
-    return _this;
+    return (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(Options).call(this, props));
   }
 
   (0, _createClass2.default)(Options, [{
     key: "render",
     value: function render() {
       return _react.default.createElement(_reactRedux.Provider, {
-        store: _store.default
+        store: store
       }, _react.default.createElement(_reactRouterDom.BrowserRouter, null, _react.default.createElement(_reactRouterDom.Switch, null, _react.default.createElement(_reactRouterDom.Route, {
         exact: true,
         path: "/options.html",
