@@ -21,7 +21,11 @@ var _react = _interopRequireDefault(require("react"));
 
 var _reactRedux = require("react-redux");
 
-var _reactstrap = require("reactstrap");
+var _Container = _interopRequireDefault(require("react-bootstrap/Container"));
+
+var _Row = _interopRequireDefault(require("react-bootstrap/Row"));
+
+var _Col = _interopRequireDefault(require("react-bootstrap/Col"));
 
 var PageRequests =
 /*#__PURE__*/
@@ -36,7 +40,7 @@ function (_React$Component) {
   (0, _createClass2.default)(PageRequests, [{
     key: "render",
     value: function render() {
-      return _react.default.createElement(_reactstrap.Container, null, _react.default.createElement(_reactstrap.Row, null, _react.default.createElement(_reactstrap.Col, null, _react.default.createElement("h1", null, "Page Requests"), _react.default.createElement("hr", null))));
+      return _react.default.createElement(_Container.default, null, _react.default.createElement(_Row.default, null, _react.default.createElement(_Col.default, null, _react.default.createElement("h1", null, "Page Requests"), _react.default.createElement("hr", null))));
     }
   }]);
   return PageRequests;

@@ -1,11 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import {
-  Container, Row, Col,
-  Table,
-  Button, Form, FormGroup, Label, Input
-} from 'reactstrap';
+
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Form from 'react-bootstrap/Form';
+import Table from 'react-bootstrap/Table';
+import Button from 'react-bootstrap/Button';
 
 import {addPage, loadPages} from 'actions';
 
@@ -13,6 +15,7 @@ class Options extends React.Component {
 
   constructor(props) {
     super(props);
+    this.state = {};
     this.props.loadPages();
   }
 
@@ -27,6 +30,7 @@ class Options extends React.Component {
   }
 
   handleAddPage() {
+    console.log(1,this.state.pagePath);
     if (!this.state.pagePath || !this.checkFormValidity('#page-form')) {
       return;
     }
@@ -62,19 +66,20 @@ class Options extends React.Component {
         </Row>
         <Row>
           <Col>
-            <Form id="page-form" inline>
-              <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-                <Label for="pagePath" className="mr-sm-2">Page Path</Label>
-                <Input type="url" name="pagePath" id="pagePath" placeholder="http://site.com" onChange={this.handleChangeInput.bind(this)} />
-              </FormGroup>
-              <Button onClick={this.handleAddPage.bind(this)}>Add</Button>
+            <Form id="page-form" inline >
+              <Form.Group as={Col} >
+                <Form.Label>Page Path</Form.Label>
+                <Form.Control type="url" name="pagePath" id="pagePath" placeholder="http://site.com" onChange={this.handleChangeInput.bind(this)} />
+                <Button onClick={this.handleAddPage.bind(this)}>Add</Button>
+              </Form.Group>
+
             </Form>
             <br/>
           </Col>
         </Row>
         <Row>
           <Col>
-            <Table dark>
+            <Table striped bordered hover variant="dark">
               <thead>
                 <tr>
                   <th>Page</th>

@@ -25,7 +25,17 @@ var _reactRedux = require("react-redux");
 
 var _reactRouterDom = require("react-router-dom");
 
-var _reactstrap = require("reactstrap");
+var _Container = _interopRequireDefault(require("react-bootstrap/Container"));
+
+var _Row = _interopRequireDefault(require("react-bootstrap/Row"));
+
+var _Col = _interopRequireDefault(require("react-bootstrap/Col"));
+
+var _Form = _interopRequireDefault(require("react-bootstrap/Form"));
+
+var _Table = _interopRequireDefault(require("react-bootstrap/Table"));
+
+var _Button = _interopRequireDefault(require("react-bootstrap/Button"));
 
 var _actions = require("actions");
 
@@ -39,6 +49,7 @@ function (_React$Component) {
 
     (0, _classCallCheck2.default)(this, Options);
     _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(Options).call(this, props));
+    _this.state = {};
 
     _this.props.loadPages();
 
@@ -62,6 +73,8 @@ function (_React$Component) {
   }, {
     key: "handleAddPage",
     value: function handleAddPage() {
+      console.log(1, this.state.pagePath);
+
       if (!this.state.pagePath || !this.checkFormValidity('#page-form')) {
         return;
       }
@@ -86,24 +99,24 @@ function (_React$Component) {
       var handleAddPage = this.handleAddPage,
           handleChangeInput = this.handleChangeInput;
       var pages = this.getPages();
-      return _react.default.createElement(_reactstrap.Container, null, _react.default.createElement(_reactstrap.Row, null, _react.default.createElement(_reactstrap.Col, null, _react.default.createElement("h1", null, "Request Handler Tool"), _react.default.createElement("hr", null))), _react.default.createElement(_reactstrap.Row, null, _react.default.createElement(_reactstrap.Col, null, _react.default.createElement(_reactstrap.Form, {
+      return _react.default.createElement(_Container.default, null, _react.default.createElement(_Row.default, null, _react.default.createElement(_Col.default, null, _react.default.createElement("h1", null, "Request Handler Tool"), _react.default.createElement("hr", null))), _react.default.createElement(_Row.default, null, _react.default.createElement(_Col.default, null, _react.default.createElement(_Form.default, {
         id: "page-form",
         inline: true
-      }, _react.default.createElement(_reactstrap.FormGroup, {
-        className: "mb-2 mr-sm-2 mb-sm-0"
-      }, _react.default.createElement(_reactstrap.Label, {
-        for: "pagePath",
-        className: "mr-sm-2"
-      }, "Page Path"), _react.default.createElement(_reactstrap.Input, {
+      }, _react.default.createElement(_Form.default.Group, {
+        as: _Col.default
+      }, _react.default.createElement(_Form.default.Label, null, "Page Path"), _react.default.createElement(_Form.default.Control, {
         type: "url",
         name: "pagePath",
         id: "pagePath",
         placeholder: "http://site.com",
         onChange: this.handleChangeInput.bind(this)
-      })), _react.default.createElement(_reactstrap.Button, {
+      }), _react.default.createElement(_Button.default, {
         onClick: this.handleAddPage.bind(this)
-      }, "Add")), _react.default.createElement("br", null))), _react.default.createElement(_reactstrap.Row, null, _react.default.createElement(_reactstrap.Col, null, _react.default.createElement(_reactstrap.Table, {
-        dark: true
+      }, "Add"))), _react.default.createElement("br", null))), _react.default.createElement(_Row.default, null, _react.default.createElement(_Col.default, null, _react.default.createElement(_Table.default, {
+        striped: true,
+        bordered: true,
+        hover: true,
+        variant: "dark"
       }, _react.default.createElement("thead", null, _react.default.createElement("tr", null, _react.default.createElement("th", null, "Page"))), _react.default.createElement("tbody", null, pages && pages.map(function (page) {
         return _react.default.createElement("tr", {
           key: Math.random()
