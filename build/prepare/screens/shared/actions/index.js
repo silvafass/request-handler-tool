@@ -3,33 +3,33 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.removePage = exports.loadPages = exports.addPage = void 0;
+exports.chromeStorageSet = exports.chromeStorageGet = void 0;
 
-var addPage = function addPage(pagePath) {
+var loadPages = function loadPages(pages) {
   return {
-    type: 'ADD_PAGE',
-    page: {
-      path: pagePath,
-      requests: []
-    }
+    type: 'LOAD_PAGES',
+    pages: pages
   };
 };
 
-exports.addPage = addPage;
-
-var loadPages = function loadPages() {
-  return {
-    type: 'LOAD_PAGES'
+var chromeStorageGet = function chromeStorageGet() {
+  return function (dispatch) {
+    return chrome.storage.sync.get(['pages'], function (config) {
+      dispatch(loadPages(config.pages || {}));
+    });
   };
 };
 
-exports.loadPages = loadPages;
+exports.chromeStorageGet = chromeStorageGet;
 
-var removePage = function removePage(pagePath) {
-  return {
-    type: 'REMOVE_PAGE',
-    pagePath: pagePath
+var chromeStorageSet = function chromeStorageSet(pages) {
+  return function (dispatch) {
+    return chrome.storage.sync.set({
+      'pages': pages
+    }, function () {
+      dispatch(loadPages(pages || {}));
+    });
   };
 };
 
-exports.removePage = removePage;
+exports.chromeStorageSet = chromeStorageSet;

@@ -1,22 +1,26 @@
-export const addPage = (pagePath) => {
+const loadPages = (pages) => {
   return {
-    type: 'ADD_PAGE',
-    page: {
-      path: pagePath,
-      requests: []
-    }
+    type: 'LOAD_PAGES',
+    pages
   };
 }
 
-export const loadPages = () => {
-  return {
-    type: 'LOAD_PAGES'
-  };
+export const chromeStorageGet = function() {
+  return dispatch => {
+    return chrome.storage.sync.get([
+      'pages'
+    ], config => {
+      dispatch(loadPages(config.pages || {}));
+    });
+  }
 }
 
-export const removePage = (pagePath) => {
-  return {
-    type: 'REMOVE_PAGE',
-    pagePath
-  };
+export const chromeStorageSet = function(pages) {
+  return dispatch => {
+    return chrome.storage.sync.set({
+      'pages': pages
+    }, () => {
+      dispatch(loadPages(pages || {}));
+    });
+  }
 }

@@ -9,14 +9,14 @@ import Form from 'react-bootstrap/Form';
 import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
 
-import {addPage, loadPages, removePage} from 'actions';
+import {chromeStorageSet, chromeStorageGet} from 'actions';
 
 class Options extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {};
-    this.props.loadPages();
+    this.props.chromeStorageGet();
   }
 
   getPages() {
@@ -33,7 +33,21 @@ class Options extends React.Component {
     if (!this.state.pagePath || !this.checkFormValidity('#page-form')) {
       return;
     }
-    this.props.addPage(this.state.pagePath);
+    this.props.chromeStorageSet({
+      ...this.props.pages,
+      [this.state.pagePath]: {
+        path: this.state.pagePath,
+        requests: []
+      }
+    });
+  }
+
+  handleRemovePage(pagePath) {
+    let pages = {
+      ...this.props.pages
+    };
+    delete pages[pagePath];
+    this.props.chromeStorageSet(pages);
   }
 
   checkFormValidity(selector) {
@@ -53,9 +67,6 @@ class Options extends React.Component {
       handleAddPage,
       handleChangeInput
     } = this;
-    const {
-      removePage
-    } = this.props;
     const pages = this.getPages();
 
     return (
@@ -81,17 +92,18 @@ class Options extends React.Component {
         </Row>
         <Row>
           <Col>
-            <Table striped bordered hover variant="dark">
+            <Table bordered hover >
               <thead>
                 <tr>
                   <th>Page</th>
+                  <th>Remove</th>
                 </tr>
               </thead>
               <tbody>
                 {pages && pages.map(page =>
                   <tr key={Math.random()}>
                     <td><Link to="/page-requests">{page.path}</Link></td>
-                    <td><Button onClick={() => removePage(page.path)}>Remove</Button></td>
+                    <td><Button onClick={() => this.handleRemovePage(page.path)}>Remove</Button></td>
                   </tr>
                 )}
               </tbody>
@@ -109,9 +121,8 @@ const mapStateToProps = (state, ownProps) => ({
 })
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  addPage: pagePath => dispatch(addPage(pagePath)),
-  loadPages: pagePath => dispatch(loadPages()),
-  removePage: pagePath => dispatch(removePage(pagePath))
+  chromeStorageSet: pages => dispatch(chromeStorageSet(pages)),
+  chromeStorageGet: () => dispatch(chromeStorageGet())
 })
 
 export default connect(

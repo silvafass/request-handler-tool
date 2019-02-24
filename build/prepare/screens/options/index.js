@@ -24,13 +24,14 @@ var _index = _interopRequireDefault(require("./home/index"));
 
 var _index2 = _interopRequireDefault(require("./page-requests/index"));
 
-require("bootstrap/dist/css/bootstrap.min.css");
-
 var _redurcers = _interopRequireDefault(require("redurcers"));
 
 var _redux = require("redux");
 
-var store = (0, _redux.createStore)(_redurcers.default);
+var _reduxThunk = _interopRequireDefault(require("redux-thunk"));
+
+//import 'bootstrap/dist/css/bootstrap.min.css';
+var store = (0, _redux.createStore)(_redurcers.default, (0, _redux.applyMiddleware)(_reduxThunk.default));
 window._store = store;
 
 var Options =

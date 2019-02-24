@@ -7,6 +7,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
+var _objectSpread3 = _interopRequireDefault(require("@babel/runtime/helpers/objectSpread"));
+
 var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
 
 var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));
@@ -51,7 +53,7 @@ function (_React$Component) {
     _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(Options).call(this, props));
     _this.state = {};
 
-    _this.props.loadPages();
+    _this.props.chromeStorageGet();
 
     return _this;
   }
@@ -77,7 +79,17 @@ function (_React$Component) {
         return;
       }
 
-      this.props.addPage(this.state.pagePath);
+      this.props.chromeStorageSet((0, _objectSpread3.default)({}, this.props.pages, (0, _defineProperty2.default)({}, this.state.pagePath, {
+        path: this.state.pagePath,
+        requests: []
+      })));
+    }
+  }, {
+    key: "handleRemovePage",
+    value: function handleRemovePage(pagePath) {
+      var pages = (0, _objectSpread3.default)({}, this.props.pages);
+      delete pages[pagePath];
+      this.props.chromeStorageSet(pages);
     }
   }, {
     key: "checkFormValidity",
@@ -94,9 +106,10 @@ function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
+      var _this3 = this;
+
       var handleAddPage = this.handleAddPage,
           handleChangeInput = this.handleChangeInput;
-      var removePage = this.props.removePage;
       var pages = this.getPages();
       return _react.default.createElement(_Container.default, null, _react.default.createElement(_Row.default, null, _react.default.createElement(_Col.default, null, _react.default.createElement("h1", null, "Request Handler Tool"), _react.default.createElement("hr", null))), _react.default.createElement(_Row.default, null, _react.default.createElement(_Col.default, null, _react.default.createElement(_Form.default, {
         id: "page-form",
@@ -112,18 +125,16 @@ function (_React$Component) {
       }), _react.default.createElement(_Button.default, {
         onClick: this.handleAddPage.bind(this)
       }, "Add"))), _react.default.createElement("br", null))), _react.default.createElement(_Row.default, null, _react.default.createElement(_Col.default, null, _react.default.createElement(_Table.default, {
-        striped: true,
         bordered: true,
-        hover: true,
-        variant: "dark"
-      }, _react.default.createElement("thead", null, _react.default.createElement("tr", null, _react.default.createElement("th", null, "Page"))), _react.default.createElement("tbody", null, pages && pages.map(function (page) {
+        hover: true
+      }, _react.default.createElement("thead", null, _react.default.createElement("tr", null, _react.default.createElement("th", null, "Page"), _react.default.createElement("th", null, "Remove"))), _react.default.createElement("tbody", null, pages && pages.map(function (page) {
         return _react.default.createElement("tr", {
           key: Math.random()
         }, _react.default.createElement("td", null, _react.default.createElement(_reactRouterDom.Link, {
           to: "/page-requests"
         }, page.path)), _react.default.createElement("td", null, _react.default.createElement(_Button.default, {
           onClick: function onClick() {
-            return removePage(page.path);
+            return _this3.handleRemovePage(page.path);
           }
         }, "Remove")));
       }))))));
@@ -140,14 +151,11 @@ var mapStateToProps = function mapStateToProps(state, ownProps) {
 
 var mapDispatchToProps = function mapDispatchToProps(dispatch, ownProps) {
   return {
-    addPage: function addPage(pagePath) {
-      return dispatch((0, _actions.addPage)(pagePath));
+    chromeStorageSet: function chromeStorageSet(pages) {
+      return dispatch((0, _actions.chromeStorageSet)(pages));
     },
-    loadPages: function loadPages(pagePath) {
-      return dispatch((0, _actions.loadPages)());
-    },
-    removePage: function removePage(pagePath) {
-      return dispatch((0, _actions.removePage)(pagePath));
+    chromeStorageGet: function chromeStorageGet() {
+      return dispatch((0, _actions.chromeStorageGet)());
     }
   };
 };
