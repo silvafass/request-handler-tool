@@ -73,8 +73,6 @@ function (_React$Component) {
   }, {
     key: "handleAddPage",
     value: function handleAddPage() {
-      console.log(1, this.state.pagePath);
-
       if (!this.state.pagePath || !this.checkFormValidity('#page-form')) {
         return;
       }
@@ -98,6 +96,7 @@ function (_React$Component) {
     value: function render() {
       var handleAddPage = this.handleAddPage,
           handleChangeInput = this.handleChangeInput;
+      var removePage = this.props.removePage;
       var pages = this.getPages();
       return _react.default.createElement(_Container.default, null, _react.default.createElement(_Row.default, null, _react.default.createElement(_Col.default, null, _react.default.createElement("h1", null, "Request Handler Tool"), _react.default.createElement("hr", null))), _react.default.createElement(_Row.default, null, _react.default.createElement(_Col.default, null, _react.default.createElement(_Form.default, {
         id: "page-form",
@@ -122,7 +121,11 @@ function (_React$Component) {
           key: Math.random()
         }, _react.default.createElement("td", null, _react.default.createElement(_reactRouterDom.Link, {
           to: "/page-requests"
-        }, page.path)));
+        }, page.path)), _react.default.createElement("td", null, _react.default.createElement(_Button.default, {
+          onClick: function onClick() {
+            return removePage(page.path);
+          }
+        }, "Remove")));
       }))))));
     }
   }]);
@@ -142,6 +145,9 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch, ownProps) {
     },
     loadPages: function loadPages(pagePath) {
       return dispatch((0, _actions.loadPages)());
+    },
+    removePage: function removePage(pagePath) {
+      return dispatch((0, _actions.removePage)(pagePath));
     }
   };
 };

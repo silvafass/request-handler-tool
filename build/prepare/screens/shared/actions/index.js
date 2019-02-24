@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.loadPages = exports.addPage = void 0;
+exports.removePage = exports.loadPages = exports.addPage = void 0;
 
 var addPage = function addPage(pagePath) {
   return {
@@ -24,3 +24,12 @@ var loadPages = function loadPages() {
 };
 
 exports.loadPages = loadPages;
+
+var removePage = function removePage(pagePath) {
+  return {
+    type: 'REMOVE_PAGE',
+    pagePath: pagePath
+  };
+};
+
+exports.removePage = removePage;

@@ -9,7 +9,7 @@ import Form from 'react-bootstrap/Form';
 import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
 
-import {addPage, loadPages} from 'actions';
+import {addPage, loadPages, removePage} from 'actions';
 
 class Options extends React.Component {
 
@@ -30,7 +30,6 @@ class Options extends React.Component {
   }
 
   handleAddPage() {
-    console.log(1,this.state.pagePath);
     if (!this.state.pagePath || !this.checkFormValidity('#page-form')) {
       return;
     }
@@ -54,6 +53,9 @@ class Options extends React.Component {
       handleAddPage,
       handleChangeInput
     } = this;
+    const {
+      removePage
+    } = this.props;
     const pages = this.getPages();
 
     return (
@@ -89,6 +91,7 @@ class Options extends React.Component {
                 {pages && pages.map(page =>
                   <tr key={Math.random()}>
                     <td><Link to="/page-requests">{page.path}</Link></td>
+                    <td><Button onClick={() => removePage(page.path)}>Remove</Button></td>
                   </tr>
                 )}
               </tbody>
@@ -107,7 +110,8 @@ const mapStateToProps = (state, ownProps) => ({
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   addPage: pagePath => dispatch(addPage(pagePath)),
-  loadPages: pagePath => dispatch(loadPages())
+  loadPages: pagePath => dispatch(loadPages()),
+  removePage: pagePath => dispatch(removePage(pagePath))
 })
 
 export default connect(

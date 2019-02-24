@@ -13,3 +13,10 @@ export const loadPages = () => {
     type: 'LOAD_PAGES'
   };
 }
+
+export const removePage = (pagePath) => {
+  return {
+    type: 'REMOVE_PAGE',
+    pagePath
+  };
+}

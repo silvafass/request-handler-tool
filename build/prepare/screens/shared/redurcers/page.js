@@ -17,10 +17,16 @@ var pages = function pages() {
 
   switch (action.type) {
     case 'ADD_PAGE':
+      if (state[action.page.path]) return (0, _objectSpread3.default)({}, state);
       return (0, _objectSpread3.default)({}, state, (0, _defineProperty2.default)({}, action.page.path, action.page));
 
     case 'LOAD_PAGES':
       return (0, _objectSpread3.default)({}, state);
+
+    case 'REMOVE_PAGE':
+      var newState = (0, _objectSpread3.default)({}, state);
+      delete newState[action.pagePath];
+      return newState;
 
     default:
       return state;
